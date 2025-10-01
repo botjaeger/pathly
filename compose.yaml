@@ -1,0 +1,29 @@
+volumes:
+    local_db:
+
+services:
+    php:
+        container_name: pathly_php
+        build: .
+        depends_on:
+            - database
+        ports:
+            - "80:80"
+        volumes:
+            - .:/var/www
+        environment:
+            APP_ENV: dev
+
+    database:
+        container_name: pathly_database
+        image: mysql:8
+        command: --innodb_use_native_aio=0 --explicit_defaults_for_timestamp
+        ports:
+            - '3306:3306'
+        volumes:
+            - local_db:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: rootpassword1
+            MYSQL_DATABASE: pathly_db
+            MYSQL_USER: pathly_db
+            MYSQL_PASSWORD: 123456
