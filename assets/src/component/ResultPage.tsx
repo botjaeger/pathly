@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDataProvider, useResetStore } from 'react-admin';
 import {
@@ -33,20 +33,23 @@ export default function ResultPage() {
     const answers = location.state?.answers || {};
     const [result, setResult] = useState<AssessmentResult | null>(null);
     const [loading, setLoading] = useState(true);
+    const submittedRef = useRef(false);
 
     useEffect(() => {
+        if (submittedRef.current) return;
+        submittedRef.current = true;
+
         const submit = async () => {
             try {
-                const res = await dataProvider.create("assessments", {
-                    data: answers,
-                });
+                const res = await dataProvider.create("assessments", { data: answers });
                 setResult(res.data as AssessmentResult);
             } finally {
                 setLoading(false);
             }
         };
+
         void submit();
-    }, [answers, dataProvider]);
+    }, [answers]);
 
     useEffect(() => {
         document.title = "Results - Multimedia Career Finder";
@@ -113,10 +116,7 @@ export default function ResultPage() {
                                 px: 2,
                                 height: "100%",
                                 fontWeight: "bold",
-                                color:
-                                    i === 1
-                                        ? theme.palette.getContrastText(theme.palette.success.light)
-                                        : theme.palette.getContrastText(colors[i % colors.length]),
+                                color: theme.palette.getContrastText(colors[i % colors.length]),
                             }}
                         >
                             <Typography>{career.name}</Typography>

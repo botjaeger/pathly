@@ -24,7 +24,7 @@ const CareerWeightChip = () => {
 export default function QuestionList() {
     return (
         <List>
-            <Datagrid rowClick="edit">
+            <Datagrid rowClick="edit" bulkActionButtons={false}>
                 <TextField source="message"/>
                 <ReferenceManyField
                     label="Career Weights"
