@@ -43,6 +43,7 @@ readonly class AssessmentScoring
             ];
         }
 
+        // $test = [];
         foreach ($answers as $iri => $ansStr) {
             try {
                 /** @var Question $question */
@@ -60,6 +61,7 @@ readonly class AssessmentScoring
                 if (!$career) {
                     continue;
                 }
+                // $test[$career->getName()] = $qc->getWeight();
                 $totals[$career->getName()] += $qc->getWeight() * $multiplier;
             }
         }
@@ -71,14 +73,19 @@ readonly class AssessmentScoring
         );
 
         arsort($percentages);
+        arsort($totals);
+        // dd($test, $totals, ['overall' => $sum], $percentages);
+
         $top = [];
-        foreach (array_slice($percentages, 0, 3, true) as $name => $pct) {
-            $career = $this->careers->findOneBy(['name' => $name]);
-            $top[] = [
-                'name' => $name,
-                'description' => $career?->getDescription(),
-                'percentage' => $pct,
-            ];
+        if ($sum > 0) {
+            foreach (array_slice($percentages, 0, 3, true) as $name => $pct) {
+                $career = $this->careers->findOneBy(['name' => $name]);
+                $top[] = [
+                    'name' => $name,
+                    'description' => $career?->getDescription(),
+                    'percentage' => $pct,
+                ];
+            }
         }
 
         return [
