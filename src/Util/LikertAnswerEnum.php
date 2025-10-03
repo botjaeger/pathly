@@ -10,7 +10,7 @@ enum LikertAnswerEnum: string
     case MAYBE = 'maybe';
     case NO = 'no';
 
-    public function score(): int
+    public function score(): float
     {
         return match ($this) {
             self::YES => 2,
