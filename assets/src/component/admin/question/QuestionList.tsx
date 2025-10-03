@@ -14,7 +14,7 @@ const CareerWeightChip = () => {
 
     return (
         <Chip
-            label={`${record.career?.name} – ${record.weight}`}
+            label={`${record.career?.name} – ${record?.yesWeight ?? 0} - ${record?.noWeight ?? 0}`}
             size="small"
             sx={{m: 0.5}}
         />

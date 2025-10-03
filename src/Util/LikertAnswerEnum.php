@@ -13,9 +13,9 @@ enum LikertAnswerEnum: string
     public function score(): int
     {
         return match ($this) {
-            self::YES => 10,
+            self::YES => 2,
             self::MAYBE => 1,
-            self::NO => 0,
+            self::NO => 0.5,
         };
     }
 

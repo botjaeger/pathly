@@ -33,8 +33,12 @@ class QuestionCareerWeight
     private ?Career $career = null;
 
     #[Groups(['weight:read', 'question:read'])]
-    #[ORM\Column]
-    private ?int $weight = null;
+    #[ORM\Column(nullable: true)]
+    private ?int $yesWeight = null;
+
+    #[Groups(['weight:read', 'question:read'])]
+    #[ORM\Column(nullable: true)]
+    private ?int $noWeight = null;
 
     public function getId(): ?int
     {
@@ -65,14 +69,26 @@ class QuestionCareerWeight
         return $this;
     }
 
-    public function getWeight(): ?int
+    public function getYesWeight(): ?int
     {
-        return $this->weight;
+        return $this->yesWeight;
     }
 
-    public function setWeight(int $weight): static
+    public function setYesWeight(?int $weight): static
     {
-        $this->weight = $weight;
+        $this->yesWeight = $weight;
+
+        return $this;
+    }
+
+    public function getNoWeight(): ?int
+    {
+        return $this->noWeight;
+    }
+
+    public function setNoWeight(?int $noWeight): static
+    {
+        $this->noWeight = $noWeight;
 
         return $this;
     }

@@ -18,14 +18,6 @@ readonly class AssessmentScoring
     ) {
     }
 
-    /**
-     * @param Assessment $object ["/api/questions/1" => "yes", ...]
-     * @return array{
-     *   totals: array<string,int>,
-     *   percentages: array<string,float>,
-     *   top: array<int,array{name:string,description:string,percentage:float}>
-     * }
-     */
     public function score(Assessment $object): array
     {
         $answers = $object->questionAnswers;
@@ -58,11 +50,29 @@ readonly class AssessmentScoring
             /** @var QuestionCareerWeight $qc */
             foreach ($question->getQuestionCareerWeights() as $qc) {
                 $career = $qc->getCareer();
+
                 if (!$career) {
                     continue;
                 }
-                // $test[$career->getName()] = $qc->getWeight();
-                $totals[$career->getName()] += $qc->getWeight() * $multiplier;
+
+                $weight = 0;
+                switch ($answer) {
+                    case LikertAnswerEnum::YES:
+                        $weight = $qc->getYesWeight() ?? 0;
+                        break;
+                    case LikertAnswerEnum::MAYBE:
+                        $weight = $qc->getYesWeight() === null ? 0 : $qc->getYesWeight() / 2;
+                        break;
+                    case LikertAnswerEnum::NO:
+                        $weight = $qc->getNoWeight() ?? 0;
+                        break;
+                }
+
+                if ($weight === 0) {
+                    continue;
+                }
+
+                $totals[$career->getName()] += $weight * $multiplier;
             }
         }
 
@@ -74,7 +84,7 @@ readonly class AssessmentScoring
 
         arsort($percentages);
         arsort($totals);
-        // dd($test, $totals, ['overall' => $sum], $percentages);
+        // dd($totals, ['overall' => $sum], $percentages);
 
         $top = [];
         if ($sum > 0) {

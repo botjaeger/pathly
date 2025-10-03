@@ -24,7 +24,8 @@ export const QuestionForm = () => {
                         >
                             <SelectInput optionText="name"/>
                         </ReferenceInput>
-                        <NumberInput source="weight" label="Weight"/>
+                        <NumberInput source="yesWeight" label="Yes Weight"/>
+                        <NumberInput source="noWeight" label="No Weight"/>
                     </Stack>
                 </SimpleFormIterator>
             </ArrayInput>
